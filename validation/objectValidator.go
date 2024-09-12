@@ -1,8 +1,8 @@
 package validation
 
-import(
-	"ddj/utils/errorhandling/errorhandlers"
-	"ddj/utils/errorhandling/errors"
+import (
+	"github.com/daandejongen/utils/errorhandling/errorhandlers"
+	"github.com/daandejongen/utils/errorhandling/errors"
 )
 
 type ObjectValidator[T any] interface {
