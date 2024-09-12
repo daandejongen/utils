@@ -7,7 +7,7 @@ type ObjectValidatorBuilder[T any] interface {
 	WithErrorHandler(handler errorhandlers.ErrorHandler) ObjectValidatorBuilder[T]
 }
 
-type objectValidatorBuilder[T any] struct{
+type objectValidatorBuilder[T any] struct {
 	validator *objectValidator[T]
 }
 
