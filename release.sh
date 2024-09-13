@@ -50,7 +50,7 @@ bump_version() {
     echo "Version bumped to $NEW_VERSION"
 }
 
-bump_version("$1")
+bump_version "$1"
 
 git tag $VERSION
 git push origin $VERSION
