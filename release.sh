@@ -1,8 +1,5 @@
 #!/bin/bash
 
-VERSION=$(cat VERSION)
-LATEST_VERSION=$(git tag | tail -1)
-
 if [[ "$#" -ne 2 ]]; then
     echo "Usage: $0 [minor|patch] 'release title'"
     exit 1
@@ -13,6 +10,9 @@ if [[ -n $(git status --porcelain) ]]; then
     exit 1
 fi
 
+VERSION=$(cat VERSION | sed 's/^v//')
+LATEST_VERSION=$(git tag | tail -1 | sed 's/^v//')
+
 if [[ $VERSION != $LATEST_VERSION ]]; then
     echo "Make sure that the string in VERSION equals the current latest tag."
     exit 1
@@ -20,6 +20,7 @@ fi
 
 #bump version
 IFS="." read -r -a VERSION_PARTS <<< "$VERSION"
+MAJOR=${VERSION_PARTS[0]}
 MINOR=${VERSION_PARTS[1]}
 PATCH=${VERSION_PARTS[2]}
 
@@ -43,7 +44,7 @@ bump_version() {
         ;;
     esac
 
-    NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+    NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
 
     echo "$NEW_VERSION" > VERSION
 
@@ -52,12 +53,15 @@ bump_version() {
 
 bump_version "$1"
 
-git tag $VERSION
-git push origin $VERSION
-COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+echo "tagging current commit with new version $NEW_VERSION"
+git tag $NEW_VERSION
 
+echo "pushing changes to origin"
+git push origin $NEW_VERSION
+
+echo "writing new version to the changelog"
 sed -i "" "/Changelog/ a\\
-${VERSION} - ${COMMIT_MESSAGE}
+${NEW_VERSION} - $2
 " CHANGELOG.md
 
-echo "Released utils version $VERSION"
+echo "Succesfully released utils $NEW_VERSION"
