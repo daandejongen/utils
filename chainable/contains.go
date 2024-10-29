@@ -1,6 +1,6 @@
-package slices
+package chainable
 
-func Contains[T comparable](subjects []T, target T) bool {
+func (subjects Chainable[T]) Contains(target T) bool {
 	contains := false
 	for _, subj := range subjects {
 		if subj == target {
