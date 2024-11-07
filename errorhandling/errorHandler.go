@@ -1,4 +1,4 @@
-package errorhandlers
+package errorhandling
 
 type ErrorHandler interface {
 	Handle(...error)
